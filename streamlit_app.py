@@ -8,16 +8,19 @@ st.title("ESP32-S Controller")
 
 def send_command(command):
     try:
-        response = requests.get(f"{ESP32_IP}/{command}")
+        response = requests.get(f"{ESP32_IP}/{command}", timeout=5)
         if response.status_code == 200:
             return response.text
         else:
             return f"Failed with status code {response.status_code}"
-    except Exception as e:
+    except requests.Timeout:
+        return "Error: Timeout while trying to connect to ESP32-S"
+    except requests.RequestException as e:
         return f"Error: {e}"
 
 if st.button('Start'):
     result = send_command('start')
+    st.write(result)
     if "Started" in result:
         st.success("ESP32-S started successfully.")
     else:
@@ -25,6 +28,7 @@ if st.button('Start'):
 
 if st.button('Stop'):
     result = send_command('stop')
+    st.write(result)
     if "Stopped" in result:
         st.success("ESP32-S stopped successfully.")
     else:
