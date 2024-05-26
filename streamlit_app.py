@@ -1,35 +1,30 @@
 import streamlit as st
 import requests
 
-# Update with the actual IP address of your ESP32-S
+# Define the ESP32 IP address
 ESP32_IP = "http://172.20.10.3"
 
-st.title("ESP32-S Controller")
+# Create a title for the web app
+st.title("ESP32 Controller")
 
-def send_command(command):
-    try:
-        response = requests.get(f"{ESP32_IP}/{command}", timeout=5)
-        if response.status_code == 200:
-            return response.text
-        else:
-            return f"Failed with status code {response.status_code}"
-    except requests.Timeout:
-        return "Error: Timeout while trying to connect to ESP32-S"
-    except requests.RequestException as e:
-        return f"Error: {e}"
-
-if st.button('Start'):
-    result = send_command('start')
-    st.write(result)
-    if "Started" in result:
-        st.success("ESP32-S started successfully.")
+# Define functions to send start and stop requests
+def send_start_request():
+    response = requests.get(f"{ESP32_IP}/start")
+    if response.status_code == 200:
+        st.success("Started successfully")
     else:
-        st.error(result)
+        st.error("Failed to start")
 
-if st.button('Stop'):
-    result = send_command('stop')
-    st.write(result)
-    if "Stopped" in result:
-        st.success("ESP32-S stopped successfully.")
+def send_stop_request():
+    response = requests.get(f"{ESP32_IP}/stop")
+    if response.status_code == 200:
+        st.success("Stopped successfully")
     else:
-        st.error(result)
+        st.error("Failed to stop")
+
+# Create buttons to send the requests
+if st.button("Start"):
+    send_start_request()
+
+if st.button("Stop"):
+    send_stop_request()
