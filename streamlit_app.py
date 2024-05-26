@@ -10,17 +10,17 @@ st.title("ESP32 Controller")
 # Define functions to send start and stop requests with error handling
 def send_start_request():
     try:
-        response = requests.get(f"{ESP32_IP}/start", timeout=30)
-        if response.status_code == 200:
-            st.success("Started successfully")
-        else:
-            st.error(f"Failed to start: {response.status_code}")
+        response = requests.get(f"{ESP32_IP}/start", timeout=10)
+        # if response.status_code == 200:
+        #     st.success("Started successfully")
+        # else:
+        #     st.error(f"Failed to start: {response.status_code}")
     except requests.exceptions.RequestException as e:
         st.error(f"Request failed: {e}")
 
 def send_stop_request():
     try:
-        response = requests.get(f"{ESP32_IP}/stop", timeout=30)
+        response = requests.get(f"{ESP32_IP}/stop", timeout=10)
         if response.status_code == 200:
             st.success("Stopped successfully")
         else:
